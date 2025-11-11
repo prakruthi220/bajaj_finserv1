@@ -26,13 +26,12 @@ public class StartupRunner implements CommandLineRunner {
         System.out.println("--- [TASK STARTED] ---");
 
         try {
-            // === STEP 1: Generate Webhook ===
             System.out.println("1. Generating Webhook...");
 
             WebhookRequest webhookRequest = new WebhookRequest();
-            // TODO: Change to your details
+           
             webhookRequest.setName("Prakruthi GP");
-            webhookRequest.setRegNo("PES1UG22EC204"); // <-- TODO: YOUR EVEN RegNo
+            webhookRequest.setRegNo("PES1UG22EC204"); 
             webhookRequest.setEmail("pes1202203666@pesu.pes.edu");
 
             String generateUrl = "https://bfhldevapigw.healthrx.co.in/hiring/generateWebhook/JAVA";
@@ -52,8 +51,6 @@ public class StartupRunner implements CommandLineRunner {
             String accessToken = response.getAccessToken();
             System.out.println("   > Success. Received webhook and token.");
 
-
-            // === STEP 2: Solve SQL Problem ===
             System.out.println("2. Preparing SQL Solution...");
 
             String myFinalSqlQuery = "SELECT\n" +
@@ -77,26 +74,22 @@ public class StartupRunner implements CommandLineRunner {
                     "    e1.EMP_ID DESC;";
 
 
-            // === STEP 3: Submit Solution ===
             System.out.println("3. Submitting Solution...");
 
             SolutionRequest solutionRequest = new SolutionRequest();
             solutionRequest.setFinalQuery(myFinalSqlQuery);
 
-            // Set up headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Authorization", accessToken); // Set the JWT
 
-            // Create the request entity
             HttpEntity<SolutionRequest> entity = new HttpEntity<>(solutionRequest, headers);
 
-            // Send the POST request
             restTemplate.exchange(
-                    webhookUrl,    // The URL from Step 1's response
+                    webhookUrl,    
                     HttpMethod.POST,
                     entity,
-                    String.class   // We expect a simple String response
+                    String.class   
             );
 
             System.out.println("   > Success! Solution submitted.");
